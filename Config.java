@@ -15,11 +15,11 @@ public class Config {
     }
 
     public static String getApiKey() {
-        return "Vw97BC-IUY1aX-3YSvZY-EnLbMc";
+        return "ECskc7-hjTGSc-0sL4NW-5r8Pd3";
     }
 
     public static String getSharedSecret() {
-        return "ZA8vJ5CyShk419ELacAr7yXBHnprfh";
+        return "pbyXfE2Rbegt40wysbDLeuzMB9mLlZ";
     }
 
     public static String getUrl() {
