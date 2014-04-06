@@ -23,7 +23,7 @@ public class Config {
     }
 
     public static String getUrl() {
-        return "api.1337coin.appspot.com";
+        return "dev01-dot-1337coin.appspot.com";
     }
 
     public static boolean isLocalTest() {
