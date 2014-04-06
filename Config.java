@@ -6,6 +6,14 @@
 * To change this template use File | Settings | File Templates.
 */
 public class Config {
+    public static String getDeveloperApiKey() {
+        return "Vw97BC-IUY1aX-3YSvZY-EnLbMc";
+    }
+
+    public static String getDeveloperSharedSecret() {
+        return "ZA8vJ5CyShk419ELacAr7yXBHnprfh";
+    }
+
     public static String getApiKey() {
         return "Vw97BC-IUY1aX-3YSvZY-EnLbMc";
     }
