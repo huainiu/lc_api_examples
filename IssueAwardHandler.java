@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -44,16 +45,17 @@ public class IssueAwardHandler extends HttpServlet implements Servlet {
         final String awardTitle = req.getParameter("award_title");
         log.info("awardTitle: "+awardTitle);
 
-        final JSONObject award = new JSONObject();
-        award.put("player_key", playerKey);
-        award.put("player_name", playerName);
-        award.put("award_amount", awardAmount);
-        award.put("award_title", awardTitle);
+        final Award award = new Award();
+        award.setPlayerName(playerName);
+        award.setAmount(Integer.parseInt(awardAmount));
+        award.setPlayerKey(playerKey);
+        award.setTitle(awardTitle);
 
-        final String awardStr = URLEncoder.encode(award.toJSONString(), "UTF8");
+        final String awardStrBeforeURLEncode = JsonUtils.toJSONString(award);
+        final String awardStrAfterURLEncode = URLEncoder.encode(awardStrBeforeURLEncode, "UTF8");
         final String time = PythonUtils.getNanoTime();
 
-        final String params = "award="+awardStr+"&nonce="+time;
+        final String params = "award="+awardStrAfterURLEncode+"&nonce="+time;
         log.info("params: "+params);
 
         final String sign = HMacSHA512Utils.encrypt(params);
@@ -62,7 +64,7 @@ public class IssueAwardHandler extends HttpServlet implements Servlet {
         final PostMethod postMethod = new PostMethod((
                 Config.isLocalTest() ? "http://" : "https://"
                 )+Config.getUrl()+URI);
-        final NameValuePair nameValuePairAward = new NameValuePair("award", awardStr);
+        final NameValuePair nameValuePairAward = new NameValuePair("award", awardStrBeforeURLEncode);
         final NameValuePair nameValuePairNonce = new NameValuePair("nonce", time);
         postMethod.setRequestBody(new NameValuePair[]{nameValuePairAward, nameValuePairNonce});
 
@@ -70,10 +72,36 @@ public class IssueAwardHandler extends HttpServlet implements Servlet {
         postMethod.setRequestHeader("Key", Config.getApiKey());
         postMethod.setRequestHeader("Sign", sign);
 
+        log.info("sign: "+sign);
+
         httpClient.executeMethod(postMethod);
+
+//        System.out.println("------------");
 //        System.out.println(new String(postMethod.getResponseBody()));
+//        System.out.println("++++++++++++");
 
         resp.getWriter().print(new String(postMethod.getResponseBody()));
+    }
+
+    public static void main(String ...args) throws IOException {
+        final IssueAwardHandler issueAwardHandler = new IssueAwardHandler();
+        issueAwardHandler.doPost(new MockHttpServletRequest(){
+            @Override
+            public String getParameter(String name) {
+                switch (name) {
+                    case "player_key":
+                        return "agpzfjEzMzdjb2luchMLEgZQbGF5ZXIYgICAgNfi3QoM";
+                    case "player_name":
+                        return "qing";
+                    case "award_amount":
+                        return "123";
+                    case "award_title":
+                        return "award-title-test";
+                    default:
+                        return null;
+                }
+            }
+        }, null);
     }
 
 }

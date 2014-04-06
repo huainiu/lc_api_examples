@@ -20,6 +20,7 @@ public class Config {
 
     public static String getSharedSecret() {
         return "pbyXfE2Rbegt40wysbDLeuzMB9mLlZ";
+//        return "agpzfjEzMzdjb2luchMLEgZQbGF5ZXIYgICAgNfi3QoM";
     }
 
     public static String getUrl() {

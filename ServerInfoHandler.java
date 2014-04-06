@@ -40,7 +40,9 @@ public class ServerInfoHandler extends HttpServlet implements Servlet {
         postMethod.setRequestHeader("Sign", sign);
 
         httpClient.executeMethod(postMethod);
+//        System.out.println("------------------");
 //        System.out.println(new String(postMethod.getResponseBody()));
+//        System.out.println("++++++++++++++++++");
 
         resp.getWriter().print(new String(postMethod.getResponseBody()));
     }
