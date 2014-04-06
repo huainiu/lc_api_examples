@@ -29,7 +29,9 @@ public class ServerInfoHandler extends HttpServlet implements Servlet {
         final String sign = HMacSHA512Utils.encrypt(params);
 
         final HttpClient httpClient = HttpClients.getInstance();
-        final PostMethod postMethod = new PostMethod("http://"+Config.getUrl()+URI);
+        final PostMethod postMethod = new PostMethod((
+                Config.isLocalTest() ? "http://" : "https://"
+                )+Config.getUrl()+URI);
         final NameValuePair nameValuePair = new NameValuePair("nonce", time);
         postMethod.setRequestBody(new NameValuePair[]{nameValuePair});
 

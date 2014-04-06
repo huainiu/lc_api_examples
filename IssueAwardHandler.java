@@ -23,8 +23,6 @@ import java.util.HashMap;
  */
 public class IssueAwardHandler extends HttpServlet implements Servlet {
 
-    private static final boolean LOCAL_TESTING = true;
-
     private static final Log log = LogFactory.getLog("IssueAwardHandler");
 
     private static final String URI = "/api/issue_award";
@@ -62,7 +60,7 @@ public class IssueAwardHandler extends HttpServlet implements Servlet {
 
         final HttpClient httpClient = HttpClients.getInstance();
         final PostMethod postMethod = new PostMethod((
-                LOCAL_TESTING ? "http://" : "https://"
+                Config.isLocalTest() ? "http://" : "https://"
                 )+Config.getUrl()+URI);
         final NameValuePair nameValuePairAward = new NameValuePair("award", awardStr);
         final NameValuePair nameValuePairNonce = new NameValuePair("nonce", time);
